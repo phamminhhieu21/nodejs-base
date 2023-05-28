@@ -1,14 +1,12 @@
-const userRoute = require('./user');
+import user from './user';
+import auth from './auth';
 
 const initRoutes = (app) => {
-  // common
-  app.use('/', (req, res) => {
-    res.status(200).json({
-      message: 'Welcome to Hieu server',
-    });
-  });
+  // auth
+  app.use('/api/v1/auth',auth );
   // user
-  app.use('/api/v1/user', userRoute);
+  // app.use('/api/v1/user', user);
+
 };
 
 module.exports = initRoutes;
