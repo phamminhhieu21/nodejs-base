@@ -1,3 +1,22 @@
-GET http://localhost:8080/
-``
-GET http://localhost:8080/api/v1/user
+GET http://localhost:8080/api/v1/user22222
+
+###
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+    "email": "hieupm2@gmail.com",
+    "password": "12345678"
+}
+###
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "email": "hieupm2@gmail.com",
+    "password": "12345678"
+}
+
+### 
+GET http://localhost:8080/api/v1/user/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJoaWV1cG0yQGdtYWlsLmNvbSIsInJvbGVfY29kZSI6IjMiLCJpYXQiOjE2ODUzNTI2NDYsImV4cCI6MTY4NTUyNTQ0Nn0.rXEIWJFrIq1ko1GbV0iZ2ZeLF90gA9eNdYDY2l4YUVA
