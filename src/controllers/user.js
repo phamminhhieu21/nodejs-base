@@ -1,5 +1,5 @@
 import * as services from "../services"
-import { interalServerError} from "../middlewares/handleErrors"
+import { internalServerError} from "../middlewares/handleErrors"
 
 
 export const getCurrent = async (req, res) => {
@@ -9,6 +9,6 @@ export const getCurrent = async (req, res) => {
         return res.status(200).json(response)
 
     } catch (error) {
-        return interalServerError(res)
+        return internalServerError(res);
     }
 }

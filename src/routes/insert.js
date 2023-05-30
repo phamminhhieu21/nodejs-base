@@ -6,9 +6,8 @@ const router = express.Router()
 
 // PUBLIC ROUTES
 // PRIVATE ROUTES
-router.use(verifyToken) // add verifyToken middleware to all routes below
+// router.use(verifyToken) // add verifyToken middleware to all routes below
 // router.use(isAdmin) // add isAdmin middleware to all routes below
-router.get('/', controllers.getCurrent)
+router.get('/', controllers.insertData)
 
-
-module.exports = router
+export default router
