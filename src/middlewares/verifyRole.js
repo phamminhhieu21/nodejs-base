@@ -5,8 +5,8 @@ export const isAdmin = (req, res, next) => {
   if (role_code !== '1') return UnauthorizedError('Require role Admin', res);
   next();
 }
-export const isModeratorOrAdmin = (req, res, next) => {
+export const isCreatorOrAdmin = (req, res, next) => {
   const { role_code } = req.user;
-  if (role_code !== '1' && role_code !== '2') return UnauthorizedError('Require role Admin/Moderator', res);
+  if (role_code !== '1' && role_code !== '2') return UnauthorizedError('Require role Admin/Creator', res);
   next();
 }

@@ -8,7 +8,7 @@ export const register = (email, password) =>
   new Promise( async(resolve, reject) =>{
     try{
       // Check if email is already registered
-      const resp = await db.User.findOrCreate(
+      const resp = await db.User.findOrCreate( // findOrCreate will return array [object, boolean]
         {
           where: {email},
           defaults: {
@@ -17,16 +17,27 @@ export const register = (email, password) =>
           }
         }
       )
-      console.log('register service',resp)
-      const token =  resp[1] ? 
+      const accessToken =  resp[1] ? 
       jwt.sign({id : resp[0].id,email : resp[0].email, role_code : resp[0].role_code,},
-      process.env.JWT_SECRET,{expiresIn : '2d'}) 
-      : null;
+      process.env.JWT_SECRET,{expiresIn : '1h'}) 
+      : null; // if user is not exist, create access token 
+      const refreshToken =  resp[1] ?
+      jwt.sign({id : resp[0].id},
+      process.env.JWT_REFRESH_SECRET,{expiresIn : '7d'})
+      : null; // if user is not exist, create refresh token
       resolve({
         code : resp[1] ? 0 : 1,
         message : resp[1] ? 'Register success' : 'Email already registered',
-        // token : token
+        'access_token' : accessToken ? `${accessToken}` : null,
+        'refresh_token' : refreshToken ? `${refreshToken}` : null
       });
+      if(refreshToken){ // if refresh token is exist, update refresh token in db 
+        await db.User.update({
+          refresh_token : refreshToken
+        },{
+          where : {id : resp[0].id},
+        })
+      }
     }
     catch(err){
       reject(err);
@@ -42,19 +53,67 @@ export const register = (email, password) =>
         }
       )
       const isCheckedPassword = resp ? bcrypt.compareSync(password, resp.password) : false // compare password with hash password in db 
-      console.log('login service',resp)
-      const token =  isCheckedPassword ?
+      const accesstoken =  isCheckedPassword ?
       jwt.sign({id : resp.id,email : resp.email, role_code : resp.role_code,},
-      process.env.JWT_SECRET,{expiresIn : '2d'})
+      process.env.JWT_SECRET,{expiresIn : '1h'})
+      : null;
+
+      const refreshToken =  isCheckedPassword ?
+      jwt.sign({id : resp.id},
+      process.env.JWT_REFRESH_SECRET,{expiresIn : '7d'})
       : null;
 
       resolve({
-        code : token ? 0 : 1,
-        message : token ? 'Login success' : resp ? 'Wrong password' : 'Email not registered',
-        'access_token' : token ? `Bearer ${token}` : null // add Bearer to token for authorization header in request 
+        code : accesstoken ? 0 : 1,
+        message : accesstoken ? 'Login success' : resp ? 'Wrong password' : 'Email not registered',
+        'access_token' : accesstoken ? `${accesstoken}` : null, // add Bearer to token for authorization header in request
+        'refresh_token' : refreshToken ? `${refreshToken}` : null // refresh token is used to get new access token
       });
+
+      if(refreshToken){ // if refresh token is exist, update refresh token in db
+        await db.User.update({
+          refresh_token : refreshToken
+        },{
+          where : {id : resp.id},
+        })
+      }
     }
     catch(err){
       reject(err);
     }
   })
+
+  export const refreshToken = (refresh_token) => new Promise(async (resolve, reject) => {
+    try {
+        console.log('refresh token service', refresh_token)
+        const response = await db.User.findOne({
+            where: { refresh_token }
+        })
+        if (response) {
+            jwt.verify(refresh_token, process.env.JWT_REFRESH_SECRET, (err) => {
+                if (err) {
+                    resolve({
+                        err: 1,
+                        mes: 'Refresh token expired. Require login'
+                    })
+                }
+                else {
+                    const accessToken = jwt.sign({ id: response.id, email: response.email, role_code: response.role_code }, process.env.JWT_SECRET, { expiresIn: '1d' })
+                    resolve({
+                        err: accessToken ? 0 : 1,
+                        mes: accessToken ? 'OK' : 'Fail to generate new access token. Let try more time',
+                        'access_token': accessToken ? `${accessToken}` : accessToken,
+                        'refresh_token': refresh_token
+                    })
+                }
+            })
+        }else{
+            resolve({
+                err: 1,
+                mes: 'Refresh token not found'
+            })
+        }
+    } catch (error) {
+        reject(error)
+    }
+})

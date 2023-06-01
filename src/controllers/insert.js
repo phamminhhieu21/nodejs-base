@@ -4,7 +4,6 @@ import {badRequest, internalServerError} from '../middlewares/handleErrors'
 export const insertData = async (req, res) => {
   try {
     const response = await services.insertData()
-    console.log(response)
     res.status(200).json(response)
   } catch (error) {
     internalServerError(res)

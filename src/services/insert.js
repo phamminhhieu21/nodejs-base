@@ -25,9 +25,8 @@ export const insertData = () =>
         }))
         return acc
       }, [])
-      console.log(books)
 
-      // const response = await db.Category.bulkCreate(categories) 
+      // const response = await db.Category.bulkCreate(categories)
       const response = await db.Book.bulkCreate(books)
       resolve({
         err: response ? 0 : 1,
