@@ -1,7 +1,8 @@
 const { Sequelize } = require('sequelize');
+import {dbConfig} from './src/config/db.config';
 
-const sequelize = new Sequelize('nodejs-base-store', 'root', null, {
-  host: 'localhost',
+const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.password, {
+  host: dbConfig.host,
   dialect: 'mysql',
   logging: false,
 });

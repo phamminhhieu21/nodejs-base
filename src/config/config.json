@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "nodejs-base-store",
-    "host": "127.0.0.1",
+    "username": "316579_admin",
+    "password": "@Hieupm2k03",
+    "database": "node-db-test_base",
+    "host": "mysql-node-db-test.alwaysdata.net",
     "dialect": "mysql",
     "logging": false,
     "timezone": "+07:00"
