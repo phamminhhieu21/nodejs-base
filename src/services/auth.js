@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 const hashPassword = (password) => {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 }
-export const register = (email, password) => 
+export const register = (email, password, name_user) => 
   new Promise( async(resolve, reject) =>{
     try{
       // Check if email is already registered
@@ -14,11 +14,12 @@ export const register = (email, password) =>
           defaults: {
             email,
             password : hashPassword(password),
+            name : name_user
           }
         }
       )
       const accessToken =  resp[1] ? 
-      jwt.sign({id : resp[0].id,email : resp[0].email, role_code : resp[0].role_code,},
+      jwt.sign({id : resp[0].id,email : resp[0].email, role_code : resp[0].role_code,name : resp[0].name},
       process.env.JWT_SECRET,{expiresIn : '1h'}) 
       : null; // if user is not exist, create access token 
       const refreshToken =  resp[1] ?
@@ -54,7 +55,7 @@ export const register = (email, password) =>
       )
       const isCheckedPassword = resp ? bcrypt.compareSync(password, resp.password) : false // compare password with hash password in db 
       const accesstoken =  isCheckedPassword ?
-      jwt.sign({id : resp.id,email : resp.email, role_code : resp.role_code,},
+      jwt.sign({id : resp.id,email : resp.email, role_code : resp.role_code,name : resp.name},
       process.env.JWT_SECRET,{expiresIn : '1h'})
       : null;
 
