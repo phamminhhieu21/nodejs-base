@@ -1,6 +1,36 @@
 {
   "version": 2,
   "name": "nodejs-base",
-  "builds": [{ "src": "index.js", "use": "@now/node" }],
-  "routes": [{ "src": "/(.*)", "dest": "index.js" }]
+  "builds": [{ "src": "index.js", "use": "@vercel/node" }],
+  "routes": [
+    {
+      "src": "/api/v1/auth/.*",
+      "dest": "index.js"
+    },
+    {
+      "src": "/api/v1/user/.*",
+      "dest": "index.js"
+    },
+    {
+      "src": "/api/v1/book/.*",
+      "dest": "index.js"
+    },
+    {
+      "src": "/api/v1/media/.*",
+      "dest": "index.js"
+    },
+    {
+      "src": "/api/v1/insert/.*",
+      "dest": "index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "index.js"
+    }
+  ],
+  "build": {
+    "env": {
+      "MYSQL2": "latest"
+    }
+  }
 }
