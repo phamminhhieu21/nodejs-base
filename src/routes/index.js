@@ -5,7 +5,6 @@ import book from './book';
 import media from './media';
 import { notFound } from '../middlewares/handleErrors';
 const initRoutes = (app) => {
-  app.use('/', (req, res) => res.send('Welcome to HieuPM STG API'));
   // auth
   app.use('/api/v1/auth',auth );
   // user
