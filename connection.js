@@ -5,7 +5,7 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.passw
   host: dbConfig.host,
   port: dbConfig.port, // The port of the relational database, MySQL is 3306 by default
   dialect: 'mysql',
-  // dialectModule: mysql2, // To use mysql2 module instead of mysql module
+  dialectModule: mysql2, // To use mysql2 module instead of mysql module
   logging: false,
   pool: {
     max: 10,
@@ -16,12 +16,7 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.passw
   },
   // 5 seconds to release a connection back to the pool after it has been evicted in idle state (unused in the pool)
   dialectOptions: {
-    options : {
-        requestTimeout: 30000, // timeout = 30 seconds
-        encrypt: false, // Use this if you're on Windows Azure
-        trustServerCertificate: true // change to true for local dev / self-signed certs
-    }
-    // decimalNumbers: true, // Prevents sequelize from converting decimals to strings when fetching data from database
+    decimalNumbers: true, // Prevents sequelize from converting decimals to strings when fetching data from database
   },
 });
 

@@ -1,8 +1,7 @@
 const express = require('express');
-// const cors = require('cors');
 import cors from 'cors';
 require('dotenv').config();
-// const initRoutes = require('./src/routes');
+require('./passport'); // passport.js is a file that contains the configuration for passport (passport is a middleware for authentication)
 import initRoutes from './src/routes'
 
 const port = process.env.PORT || 5000;

@@ -6,7 +6,7 @@ const cloudinary = require('cloudinary').v2
 export const getPhotos = (userId) => new Promise(async (resolve, reject) => {
   try {
       const resp = await db.Media.findAndCountAll({
-        where: { userId },
+        where: { userId }, attributes: { exclude: ['userId']}, include: [{ model: db.User, attributes: { exclude: ['createdAt', 'updatedAt'] }, as: 'userData' }],
         raw : true // return plain object instead of sequelize object
       })
       resolve({
