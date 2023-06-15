@@ -1,6 +1,7 @@
 import db from "../models";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+const { v4: uuidv4 } = require('uuid');
 const hashPassword = (password) => {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 }
@@ -117,4 +118,29 @@ export const register = (email, password, name_user) =>
     } catch (error) {
         reject(error)
     }
+})
+export const verifyLoginProfile = (id, tokenLogin) => new Promise(async (resolve, reject) => {
+  try {
+      const newTokenLogin = uuidv4()
+      const response = await db.User.findOne({
+          where: { id , tokenLogin },
+          raw: true
+      })
+      const token = response && jwt.sign({ id: response.id, email: response.email, role_code: response.role_code }, process.env.JWT_SECRET, { expiresIn: '1d' })
+      if (response) {
+          resolve({
+              err: 0,
+              mes: token ? 'OK' : 'User not found or fail to login !',
+              'access_token': token ? `${token}` : null,
+              'tokenLogin': token ? `${newTokenLogin}` : null
+          })
+          await db.User.update({
+              tokenLogin: newTokenLogin
+          }, {
+              where: { id }
+          })
+      }
+  } catch (error) {
+      reject(error)
+  }
 })

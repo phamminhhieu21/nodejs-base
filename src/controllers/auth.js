@@ -48,16 +48,12 @@ export const refreshTokenController = async (req, res) => {
     return internalServerError(res);
   }
 }
-export const verifyProfileGoogle = async (req, res) => {
+export const verifyLoginProfile = async (req, res) => {
     try{
-        const {error} = joi.object({
-        token : joi.string().required()
-        }).validate({
-        token : req.body.token
-        }); // validate email and password with joi schema from helpers folder (joi_schema.js)
-        if(error) return badRequest(error.details[0]?.message, res);
-        const response = await services.verifyGoogleToken(req.body.token);
-        return res.status(200).json(response);
+      const {id , tokenLogin} = req?.body;
+      if(!id || !tokenLogin) return badRequest('Missing input', res);
+      const response = await services.verifyLoginProfile(id, tokenLogin);
+      return res.status(200).json(response);
     }
     catch(err){
         return internalServerError(res);

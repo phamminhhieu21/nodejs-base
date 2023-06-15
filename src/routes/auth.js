@@ -19,8 +19,8 @@ router.get('/google/callback', (req, res, next) => {
         next();
     })(req, res, next); // this is a middleware that will be called when the user is authenticated
 },(req, res) => { // req.user is the user profile that is returned from the verify callback function in passport.js
-    res.redirect(`${process.env.URL_CLIENT}/login-success/profile/${req.user.id}}`);
+    res.redirect(`${process.env.URL_CLIENT}/login-success/profile/${req.user.id}/${req.user.tokenLogin}`);
 });
-router.post('verify-profile-google', controller.verifyProfileGoogle);
+router.post('/login-success/verify-profile', controller.verifyLoginProfile);
 
 module.exports = router;

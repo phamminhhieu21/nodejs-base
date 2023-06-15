@@ -34,6 +34,12 @@ module.exports = {
       phone_number: {
         type: Sequelize.STRING
       },
+      typeLogin: {
+        type: Sequelize.STRING
+      },
+      tokenLogin: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: 'TIMESTAMP',
