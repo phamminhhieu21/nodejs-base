@@ -138,8 +138,8 @@ export const verifyLoginProfile = (idGoogle, tokenLogin) => new Promise(async (r
                     role_code : response.role_code,
                     avatar : response.avatar,
               },
-              'access_token': token ? `${token}` : null,
-              typeLogin
+              access_token: token ? `${token}` : null,
+              typeLogin : response.typeLogin,
           })
           await db.User.update({
               tokenLogin: newTokenLogin
