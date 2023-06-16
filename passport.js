@@ -18,10 +18,10 @@ const { v4: uuidv4 } = require('uuid');
           if(profile?.id){
             let resp = await db.User.findOrCreate({
               where: {
-                id : profile.id
+                idGoogle : profile.id
               },
               defaults: {
-                id: profile.id,
+                idGoogle: profile.id,
                 name: profile.displayName,
                 typeLogin : profile.provider,
                 email: profile.emails[0].value,
@@ -34,7 +34,7 @@ const { v4: uuidv4 } = require('uuid');
                 tokenLogin
               },{
                 where: {
-                  id : profile.id
+                  idGoogle : profile.id
                 }
               })
             }

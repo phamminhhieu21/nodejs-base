@@ -119,25 +119,32 @@ export const register = (email, password, name_user) =>
         reject(error)
     }
 })
-export const verifyLoginProfile = (id, tokenLogin) => new Promise(async (resolve, reject) => {
+export const verifyLoginProfile = (idGoogle, tokenLogin) => new Promise(async (resolve, reject) => {
   try {
       const newTokenLogin = uuidv4()
       const response = await db.User.findOne({
-          where: { id , tokenLogin },
+          where: { idGoogle , tokenLogin },
           raw: true
       })
-      const token = response && jwt.sign({ id: response.id, email: response.email, role_code: response.role_code }, process.env.JWT_SECRET, { expiresIn: '1d' })
+      const token = response && jwt.sign({ idGoogle: response.idGoogle, email: response.email, role_code: response.role_code }, process.env.JWT_SECRET, { expiresIn: '1d' })
       if (response) {
           resolve({
               err: 0,
               mes: token ? 'OK' : 'User not found or fail to login !',
+              data : {
+                    idGoogle : response.idGoogle,
+                    email : response.email,
+                    name : response.name,
+                    role_code : response.role_code,
+                    avatar : response.avatar,
+              },
               'access_token': token ? `${token}` : null,
-              'tokenLogin': token ? `${newTokenLogin}` : null
+              typeLogin
           })
           await db.User.update({
               tokenLogin: newTokenLogin
           }, {
-              where: { id }
+              where: { idGoogle}
           })
       }
   } catch (error) {

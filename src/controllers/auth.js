@@ -50,9 +50,9 @@ export const refreshTokenController = async (req, res) => {
 }
 export const verifyLoginProfile = async (req, res) => {
     try{
-      const {id , tokenLogin} = req?.body;
-      if(!id || !tokenLogin) return badRequest('Missing input', res);
-      const response = await services.verifyLoginProfile(id, tokenLogin);
+      const {idGoogle , tokenLogin} = req?.body;
+      if(!idGoogle || !tokenLogin) return badRequest('Missing input', res);
+      const response = await services.verifyLoginProfile(idGoogle, tokenLogin);
       return res.status(200).json(response);
     }
     catch(err){

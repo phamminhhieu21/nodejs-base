@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     typeLogin: DataTypes.STRING,
     tokenLogin: DataTypes.STRING,
     refresh_token: DataTypes.STRING,
+    idGoogle: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'User',

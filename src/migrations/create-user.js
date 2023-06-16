@@ -7,7 +7,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       name: {
         type: Sequelize.STRING
@@ -38,6 +38,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       tokenLogin: {
+        type: Sequelize.STRING
+      },
+      idGoogle: {
         type: Sequelize.STRING
       },
       createdAt: {
