@@ -1,16 +1,19 @@
 import * as services from "../services";
 import { internalServerError, badRequest } from "../middlewares/handleErrors";
-import { email, password, refreshToken, name } from "../utils/helpers/joi_schema";
+import { email, password, refreshToken, name, phone_number, gender, date_of_birth } from "../utils/helpers/joi_schema";
 import joi from 'joi';
 export const register = async (req, res) => {
   try{
     const {error} = joi.object({
       email,
       password,
-      name
+      name,
+      phone_number,
+      gender,
+      date_of_birth
     }).validate(req.body); // validate email and password with joi schema from helpers folder (joi_schema.js)
     if(error) return badRequest(error.details[0]?.message, res);
-    const response = await services.register(req.body.email, req.body.password, req.body.name);
+    const response = await services.register(req.body);
     return res.status(200).json(response);
   }
   catch(err){

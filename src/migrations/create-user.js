@@ -43,6 +43,12 @@ module.exports = {
       idGoogle: {
         type: Sequelize.STRING
       },
+      gender: {
+        type: Sequelize.STRING
+      },
+      date_of_birth: {
+        type: Sequelize.DATE
+      },
       createdAt: {
         allowNull: false,
         type: 'TIMESTAMP',

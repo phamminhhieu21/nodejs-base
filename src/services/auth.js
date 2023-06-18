@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const hashPassword = (password) => {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 }
-export const register = (email, password, name_user) => 
+export const register = ({email, password, name, gender, phone_number, date_of_birth}) =>
   new Promise( async(resolve, reject) =>{
     try{
       // Check if email is already registered
@@ -15,7 +15,10 @@ export const register = (email, password, name_user) =>
           defaults: {
             email,
             password : hashPassword(password),
-            name : name_user
+            name,
+            phone_number,
+            gender,
+            date_of_birth,
           }
         }
       )
@@ -67,9 +70,17 @@ export const register = (email, password, name_user) =>
 
       resolve({
         code : accesstoken ? 0 : 1,
-        message : accesstoken ? 'Login success' : resp ? 'Wrong password' : 'Email not registered',
-        'access_token' : accesstoken ? `${accesstoken}` : null, // add Bearer to token for authorization header in request
-        'refresh_token' : refreshToken ? `${refreshToken}` : null // refresh token is used to get new access token
+        message : accesstoken ? `Welcome ${resp?.name}` : resp ? 'Wrong password' : 'Email not registered',
+        data : {
+          id : resp?.id,
+          email : resp?.email,
+          name : resp?.name,
+          role_code : resp?.role_code,
+          avatar : resp?.avatar
+        },
+        typeLogin : 'normal',
+        access_token : accesstoken ? `${accesstoken}` : null, // add Bearer to token for authorization header in request
+        refresh_token : refreshToken ? `${refreshToken}` : null // refresh token is used to get new access token
       });
 
       if(refreshToken){ // if refresh token is exist, update refresh token in db
@@ -129,8 +140,8 @@ export const verifyLoginProfile = (idGoogle, tokenLogin) => new Promise(async (r
       const token = response && jwt.sign({ idGoogle: response.idGoogle, email: response.email, role_code: response.role_code }, process.env.JWT_SECRET, { expiresIn: '1d' })
       if (response) {
           resolve({
-              err: 0,
-              mes: token ? 'OK' : 'User not found or fail to login !',
+              code: token ? 0 : 1,
+              message: token ? `Welcome ${response.name}` : 'User not found or fail to login !',
               data : {
                     idGoogle : response.idGoogle,
                     email : response.email,
