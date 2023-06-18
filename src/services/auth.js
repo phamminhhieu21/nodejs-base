@@ -32,7 +32,7 @@ export const register = ({email, password, name, gender, phone_number, date_of_b
       : null; // if user is not exist, create refresh token
       resolve({
         code : resp[1] ? 0 : 1,
-        message : resp[1] ? 'Register success' : 'Email already registered',
+        message : resp[1] ? `Register success, ${resp[0].name} can login now` : 'Email already registered',
         'access_token' : accessToken ? `${accessToken}` : null,
         'refresh_token' : refreshToken ? `${refreshToken}` : null
       });
