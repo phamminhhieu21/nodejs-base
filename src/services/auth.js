@@ -143,13 +143,13 @@ export const verifyLoginProfile = (idGoogle, tokenLogin) => new Promise(async (r
           where: { idGoogle , tokenLogin },
           raw: true
       })
-      const token = response && jwt.sign({ idGoogle: response.idGoogle, email: response.email, role_code: response.role_code }, process.env.JWT_SECRET, { expiresIn: '1d' })
+      const token = response && jwt.sign({ id: response.id, email: response.email, role_code: response.role_code }, process.env.JWT_SECRET, { expiresIn: '1d' })
       if (response) {
           resolve({
               code: token ? 0 : 1,
               message: token ? `Welcome ${response.name}` : 'User not found or fail to login !',
               data : {
-                    idGoogle : response.idGoogle,
+                    id : response.id,
                     email : response.email,
                     name : response.name,
                     role_code : response.role_code,

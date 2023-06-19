@@ -61,7 +61,7 @@ export const createBook = (body, fileData) => new Promise(async (resolve, reject
 // UPDATE
 export const updateBook = ({id , ...body}, fileData) => new Promise(async (resolve, reject) => {
   try {
-    if(fileData) body.image = fileData?.path // if fileData is exist, add image to body 
+    if(fileData) body.image = fileData?.path // if fileData is exist, add image to body
     const resp = await db.Book.update(
       body, 
     {

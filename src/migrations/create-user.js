@@ -46,6 +46,9 @@ module.exports = {
       date_of_birth: {
         type: Sequelize.DATE
       },
+      filenameAvatar: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: 'TIMESTAMP',

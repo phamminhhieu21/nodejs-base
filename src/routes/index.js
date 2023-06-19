@@ -9,7 +9,8 @@ const initRoutes = (app) => {
   // auth
   app.use('/api/v1/auth',auth );
   // user
-  app.use('/api/v1/user/:idUser', controllers.getCurrent);
+  // app.use('/api/v1/user/:idUser', controllers.getCurrent);
+  app.use('/api/v1/user/update-profile', controllers.updateProfileUser);
   // book
   app.use('/api/v1/book', book);
   // media
