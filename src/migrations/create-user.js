@@ -28,9 +28,6 @@ module.exports = {
       refresh_token: {
         type: Sequelize.STRING
       },
-      day_of_birth: {
-        type: Sequelize.DATE
-      },
       phone_number: {
         type: Sequelize.STRING
       },

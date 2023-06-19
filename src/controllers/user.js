@@ -4,8 +4,8 @@ import { internalServerError} from "../middlewares/handleErrors"
 
 export const getCurrent = async (req, res) => {
     try {
-        const { id } = req.user // get user id from req object (added by verifyToken middleware) 
-        const response = await services.getOne(id)
+        const { idUser } = req.params // get user id from req object (added by verifyToken middleware)
+        const response = await services.getOne(idUser)
         return res.status(200).json(response)
 
     } catch (error) {

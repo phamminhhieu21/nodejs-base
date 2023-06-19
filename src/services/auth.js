@@ -33,8 +33,9 @@ export const register = ({email, password, name, gender, phone_number, date_of_b
       resolve({
         code : resp[1] ? 0 : 1,
         message : resp[1] ? `Register success, ${resp[0].name} can login now` : 'Email already registered',
-        'access_token' : accessToken ? `${accessToken}` : null,
-        'refresh_token' : refreshToken ? `${refreshToken}` : null
+        access_token : accessToken ? `${accessToken}` : null,
+          email : resp[0].email
+        // refresh_token : refreshToken ? `${refreshToken}` : null
       });
       if(refreshToken){ // if refresh token is exist, update refresh token in db 
         await db.User.update({
@@ -57,6 +58,11 @@ export const register = ({email, password, name, gender, phone_number, date_of_b
           raw : true // return plain object instead of sequelize object
         }
       )
+        if(resp) await db.User.update({
+          typeLogin : 'normal',
+        },{
+          where : {id : resp.id},
+        })
       const isCheckedPassword = resp ? bcrypt.compareSync(password, resp.password) : false // compare password with hash password in db 
       const accesstoken =  isCheckedPassword ?
       jwt.sign({id : resp.id,email : resp.email, role_code : resp.role_code,name : resp.name},
