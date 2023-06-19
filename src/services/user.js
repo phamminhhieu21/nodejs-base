@@ -31,9 +31,9 @@ export const updateProfileUser = ({id , ...body}, fileData) => new Promise(async
               where: { id }
           })
         resolve({
-            err: resp[0] ? 0 : 1, // resp[0] is number of rows affected
-            mes: resp[0]  ? `User updated` : 'Cannot update user',
-            dataUpdate : resp[0] ? body : null
+            err: resp[0] > 0 ? 0 : 1, // resp[0] is number of rows affected
+            mes: resp[0] > 0  ? `User updated` : 'Cannot update user',
+            dataUpdate : resp[0] > 0 ? body : null
         })
         if(resp[0] === 0 && fileData) cloudinary.uploader.destroy(fileData.filename)
     } catch (error) {
