@@ -24,7 +24,7 @@ export const getOne = (idUser) => new Promise(async (resolve, reject) => {
 export const updateProfileUser = ({id , ...body}, fileData) => new Promise(async (resolve, reject) => {
     try {
         if(fileData) body.avatar = fileData?.path // if fileData is exist, add image to body
-        body.filenameAvatar = fileData?.filename // add filename to body to delete image from cloudinary when update user failed
+        //body.filenameAvatar = fileData?.filename
         const resp = await db.User.update(
           body,
           {
@@ -32,7 +32,7 @@ export const updateProfileUser = ({id , ...body}, fileData) => new Promise(async
           })
         resolve({
             err: resp[0] > 0 ? 0 : 1, // resp[0] is number of rows affected
-            mes: resp[0] > 0  ? `User updated` : 'Cannot update user',
+            message:  resp[0] > 0  ? `User updated` : 'Cannot update user',
             dataUpdate : resp[0] > 0 ? body : null
         })
         if(resp[0] === 0 && fileData) cloudinary.uploader.destroy(fileData.filename)
