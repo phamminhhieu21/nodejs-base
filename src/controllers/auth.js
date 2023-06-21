@@ -20,6 +20,27 @@ export const register = async (req, res) => {
     return internalServerError(res);
   }
 }
+export const registerMailController = async (req, res) => {
+  try{
+    const { email } = req.body;
+    const {error} = joi.object({
+      email,
+      password,
+      name,
+      phone_number,
+      gender,
+      date_of_birth
+    }).validate(req.body); // validate email and password with joi schema from helpers folder (joi_schema.js)
+    if(error) return badRequest(error.details[0]?.message, res);
+    const response = await services.registerConfirmMailService(email);
+    if(response.code !== 0) return res.status(200).json(response);
+    res.cookie('dataRegister', {...req.body, token : response.token }, { httpOnly: true, maxAge: 15 * 60 * 1000 }); // set data register to cookie
+    return res.status(200).json(response);
+  }
+  catch(err){
+    return internalServerError(res);
+  }
+}
 export const login = async (req, res) => {
   try{
     const {error} = joi.object({

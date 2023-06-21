@@ -2,6 +2,8 @@ import db from "../models";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 const { v4: uuidv4 } = require('uuid');
+import sendMail from '../utils/sendMail';
+import asyncHandler from 'express-async-handler';
 const hashPassword = (password) => {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 }
@@ -49,6 +51,31 @@ export const register = ({email, password, name, gender, phone_number, date_of_b
       reject(err);
     }
   })
+
+// register account with send mail confirm
+export const registerConfirmMailService = (email) => new Promise(async(resolve, reject) => {
+    try{
+        const user = await db.User.findOne({ where: { email } });
+        if (user) {
+            resolve({
+                code: 1,
+                message: 'Email already registered'
+            })
+        }
+        const token = uuidv4();
+        const html = `<p>Please click into link below to finished progress register account, link will expired after 15 min from now</p> 
+                             <a href="${process.env.URL_SERVER}/api/v1/auth/register/confirm-mail/${token}">Click here</a>`;
+        const info = await sendMail({ email, html, subject : 'Please complete register with HieuPM' });
+        resolve({
+            code: 0,
+            token : token,
+            message: 'Please check your email to confirm your account',
+            info
+        })
+    }catch (e) {
+        reject(e);
+    }
+})
   export const login = (email, password) => 
   new Promise( async(resolve, reject) =>{
     try{
