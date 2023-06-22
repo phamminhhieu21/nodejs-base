@@ -1,7 +1,8 @@
 import * as services from "../services";
 import { internalServerError, badRequest } from "../middlewares/handleErrors";
-import { email, password, refreshToken, name, phone_number, gender, date_of_birth } from "../utils/helpers/joi_schema";
+import { email, password, refreshToken, name, phone_number, gender, date_of_birth, token } from "../utils/helpers/joi_schema";
 import joi from 'joi';
+import {verifyRegisterMailService} from "../services";
 export const register = async (req, res) => {
   try{
     const {error} = joi.object({
@@ -40,6 +41,27 @@ export const registerMailController = async (req, res) => {
   catch(err){
     return internalServerError(res);
   }
+}
+export const verifyRegisterMailController = async (req, res) => {
+    try{
+        const cookie = req.cookies;
+        const { token } = req.params;
+        if(!cookie || cookie?.dataRegister?.token !== token) return res.redirect(`${process.env.URL_CLIENT}/register/verify-failed`);
+        const {error} = joi.object({
+        token
+        }).validate({token}); // validate email and password with joi schema from helpers folder (joi_schema.js)
+        if(error) return badRequest(error.details[0]?.message, res);
+        const response = await services.verifyRegisterMailService(token , cookie);
+        if(response.code === 0){
+            res.clearCookie('dataRegister'); // clear cookie
+            return res.status(200).json(response);
+        } else{
+            return res.redirect(`${process.env.URL_CLIENT}/register/verify-failed`);
+        }
+    }
+    catch(err){
+        return internalServerError(res);
+    }
 }
 export const login = async (req, res) => {
   try{

@@ -10,6 +10,7 @@ export const phone_number = Joi.string()
 export const date_of_birth = Joi.date().required()
 export const role_code = Joi.string().uppercase().required()
 export const refresh_token = Joi.string().required()
+export const token = Joi.string().required()
 
 // book
 export const title = Joi.string().required()

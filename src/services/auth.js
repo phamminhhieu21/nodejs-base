@@ -76,6 +76,20 @@ export const registerConfirmMailService = (email) => new Promise(async(resolve, 
         reject(e);
     }
 })
+export const verifyRegisterMailService = (token, cookie) => new Promise(async(resolve, reject) => {
+    try{
+       const resp = await db.User.create({
+            ...cookie.dataRegister
+       })
+        resolve({
+            code: resp ? 0 : 1,
+            message: resp ? 'Register success, please go login!' : 'Register faild',
+            dataRegister : resp ? resp : null
+        })
+    }catch (e) {
+        reject(e);
+    }
+})
   export const login = (email, password) => 
   new Promise( async(resolve, reject) =>{
     try{
