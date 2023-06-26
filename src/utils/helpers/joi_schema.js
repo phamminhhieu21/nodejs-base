@@ -2,7 +2,7 @@ import Joi from "joi";
 
 // user
 export const id = Joi.string().required()
-export const email = Joi.string().pattern(new RegExp('gmail.com$')).required()
+export const email = Joi.string().email().required()
 export const name = Joi.string().required()
 export const password = Joi.string().min(6).required()
 export const gender = Joi.string().required()
