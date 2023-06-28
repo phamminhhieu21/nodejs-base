@@ -1,8 +1,10 @@
 import db from "../models";
 import {comparePassword, hashPassword} from "../utils/hashPassword";
 import jwt from "jsonwebtoken";
+
 const {v4: uuidv4} = require('uuid');
 import sendMail from '../utils/sendMail';
+import {generateToken, verifyToken} from "../utils/jwt";
 
 export const register = ({email, password, name, gender, phone_number, date_of_birth}) =>
     new Promise(async (resolve, reject) => {
@@ -49,42 +51,48 @@ export const register = ({email, password, name, gender, phone_number, date_of_b
     })
 
 // register account with send mail confirm
-export const registerConfirmMailService = (email) => new Promise(async (resolve, reject) => {
+export const registerConfirmMailService = (body) => new Promise(async (resolve, reject) => {
     try {
-        const user = await db.User.findOne({where: {email}});
-        if (user) {
-            resolve({
-                code: 1,
-                message: 'Email already registered'
-            })
-        }
-        const token = uuidv4();
+        const resp = await db.User.findOrCreate({where: {email: body.email},
+            defaults: {
+                ...body,
+                password: hashPassword(body.password),
+            }
+        });
+        const token = resp[1] && generateToken({
+            email: resp[0].email
+        }, '15m');
         const html = `<p>Please click into link below to finished progress register account, link will expired after 15 min from now</p> 
                              <a href="${process.env.URL_CLIENT}/register/confirm-mail/${token}">Click here</a>`;
-        const info = await sendMail({email, html, subject: 'Please complete register with HieuPM'});
+        resp[1] && await sendMail({email : body.email , html, subject: 'Please complete register with HieuPM'})
         resolve({
-            code: 0,
-            token: token,
-            message: 'Please check your email to confirm your account',
-            info
+            code: resp[1] ? 0 : 1,
+            message: resp[1] ? 'Please check your email to confirm your account' : 'Email already registered',
         })
     } catch (e) {
         reject(e);
     }
 })
-export const verifyRegisterMailService = (token, cookie) => new Promise(async (resolve, reject) => {
+export const verifyRegisterMailService = (token) => new Promise(async (resolve, reject) => {
     try {
-        const resp = await db.User.create({
-            ...cookie.dataRegister
-        })
-        resolve({
-            code: resp ? 0 : 1,
-            message: resp ? 'Register success, please go login!' : 'Register failed',
-            dataRegister: resp ? {
-                email : resp.email,
-                name : resp.name,
-            } : null
-        })
+        const data = verifyToken(token, process.env.JWT_SECRET);
+        const resp = await db.User.findOne({where: {email}});
+        if (resp) {
+            await db.User.update({
+                is_active: true,
+            }, {
+                where: {id: resp.id},
+            })
+            resolve({
+                code: 0,
+                message: 'Register success, you can login now',
+            })
+        } else {
+            resolve({
+                code: 1,
+                message: 'Email not exist',
+            })
+        }
     } catch (e) {
         reject(e);
     }

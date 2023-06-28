@@ -49,6 +49,10 @@ module.exports = {
       filenameAvatar: {
         type: Sequelize.STRING
       },
+      is_active: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
       createdAt: {
         allowNull: false,
         type: 'TIMESTAMP',
