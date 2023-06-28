@@ -4,9 +4,12 @@ import * as controller from '../controllers'
 require('dotenv').config();
 const router = express.Router();
 
+// register account
 router.post('/register', controller.registerMailController);
-router.post('/register/confirm-mail/:token', controller.verifyRegisterMailController);
+// router.post('/register/confirm-mail/:token', controller.verifyRegisterMailController);
 // router.post('/register', controller.register);
+
+// login
 router.post('/login', controller.login);
 router.post('/refresh-token', controller.refreshTokenController);
 

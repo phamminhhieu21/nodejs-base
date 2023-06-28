@@ -8,6 +8,7 @@ import { notFound } from '../middlewares/handleErrors';
 const initRoutes = (app) => {
   // auth
   app.use('/api/v1/auth',auth );
+  app.use('/api/v1/auth/register/confirm-mail/:token', controllers.verifyRegisterMailController);
   // user
   app.use('/api/v1/user/update-profile', controllers.updateProfileUser);
   app.use('/api/v1/user/:idUser', controllers.getCurrent);
