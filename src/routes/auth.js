@@ -3,6 +3,7 @@ import passport from 'passport';
 import * as controller from '../controllers'
 require('dotenv').config();
 const router = express.Router();
+import {urlPaths} from "../constants/urlPaths";
 
 // register account
 router.post('/register', controller.registerMailController);
@@ -12,6 +13,11 @@ router.post('/register', controller.registerMailController);
 // login
 router.post('/login', controller.login);
 router.post('/refresh-token', controller.refreshTokenController);
+
+// forgot password
+router.post('/forgot-password', controller.forgotPassword);
+// reset password
+router.post('/reset-password', controller.resetPassword);
 
 //* google auth
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session : false })); // scope: ['profile', 'email'] is the default value for the scope parameter (optional)
@@ -24,7 +30,7 @@ router.get('/google/callback', (req, res, next) => {
         next();
     })(req, res, next); // this is a middleware that will be called when the user is authenticated
 },(req, res) => { // req.user is the user profile that is returned from the verify callback function in passport.js
-    res.redirect(`${process.env.URL_CLIENT}/login-success/profile/${req.user.id}/${req.user.tokenLogin}`);
+    res.redirect(`${urlPaths.client.LOGIN_SUCCESSFUL}/${req.user.id}/${req.user.tokenLogin}`);
 });
 router.post('/login-success/verify-profile', controller.verifyLoginProfile);
 

@@ -29,6 +29,9 @@ module.exports = (sequelize, DataTypes) => {
     idGoogle: DataTypes.STRING,
     filenameAvatar: DataTypes.STRING,
     is_active: DataTypes.BOOLEAN,
+    isForgotPassword: DataTypes.BOOLEAN,
+    passwordReset : DataTypes.STRING,
+    tokenResetPassword: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'User',

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const generateToken = (params, timeExpired) => jwt.sign(params, process.env.JWT_SECRET, { expiresIn: timeExpired })
+const generateToken = (params, timeExpired = '5m') => jwt.sign(params, process.env.JWT_SECRET, { expiresIn: timeExpired })
 const generateAccessToken = (id, role_code, name, mail) => jwt.sign({
   id,
   role_code,
