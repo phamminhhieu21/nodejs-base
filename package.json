@@ -47,9 +47,6 @@
   "engines": {
     "node": ">=16 <18"
   },
-  "babel": {
-    "presets": ["@babel/preset-env"]
-  },
   "devDependencies": {
     "@babel/cli": "^7.21.5",
     "@babel/core": "^7.22.1",
