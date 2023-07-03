@@ -1,4 +1,4 @@
 # render.yaml
 
-buildCommand: yarn build
-startCommand: yarn dev
+buildCommand: yarn run build
+startCommand: yarn run dev
