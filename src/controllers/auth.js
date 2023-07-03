@@ -8,7 +8,9 @@ import {
     phone_number,
     gender,
     date_of_birth,
-    token
+    token,
+    oldPassword,
+    newPassword
 } from '../utils/helpers/joi_schema'
 import joi from 'joi'
 import {urlPaths} from "../constants/urlPaths";
@@ -93,6 +95,22 @@ export const verifyLoginProfile = async (req, res) => {
         const {idGoogle, tokenLogin} = req?.body
         if (!idGoogle || !tokenLogin) return badRequest('Missing input', res)
         const response = await services.verifyLoginProfile(idGoogle, tokenLogin)
+        return res.status(200).json(response)
+    } catch (err) {
+        return internalServerError(res)
+    }
+}
+
+export const changePassword = async (req, res) => {
+    try {
+        const {email ,newPassword, oldPassword } = req.body
+        const {error} = joi.object({
+            email,
+            newPassword,
+            oldPassword
+        }).validate(req.body)
+        if (error) return badRequest(error.details[0]?.message, res)
+        const response = await services.changePassword(email, newPassword, oldPassword)
         return res.status(200).json(response)
     } catch (err) {
         return internalServerError(res)

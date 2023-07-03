@@ -18,6 +18,8 @@ router.post('/refresh-token', controller.refreshTokenController);
 router.post('/forgot-password', controller.forgotPassword);
 // reset password
 router.post('/reset-password', controller.resetPassword);
+// change password
+router.post ('/change-password', controller.changePassword);
 
 //* google auth
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session : false })); // scope: ['profile', 'email'] is the default value for the scope parameter (optional)
