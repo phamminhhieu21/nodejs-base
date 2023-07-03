@@ -1,0 +1,8 @@
+buildCommand: yarn
+devCommand: yarn dev
+publishCommand: yarn build
+startCommand: yarn start
+
+env:
+  - key: NODE_VERSION
+    value: 18
