@@ -107,7 +107,19 @@ export const login = (email, password) =>
                     raw: true // return plain object instead of sequelize object
                 }
             )
-            if (resp) await db.User.update({
+            // check if password is match with passwordReset in db or not
+            if (resp?.passwordReset) {
+                const isMatchPasswordReset = comparePassword(password, resp.passwordReset)
+                if (isMatchPasswordReset) {
+                    await db.User.update({
+                        password: resp.passwordReset,
+                        passwordReset: null,
+                    }, {
+                        where: {id: resp.id}
+                    })
+                }
+            }
+            if (resp && !resp?.passwordReset) await db.User.update({
                 typeLogin: 'normal'
             }, {
                 where: {id: resp.id}
@@ -232,13 +244,13 @@ export const verifyLoginProfile = (idGoogle, tokenLogin) => new Promise(async (r
 export const forgotPassword = (email) => new Promise(async (resolve, reject) => {
     try {
         const resp = await db.User.findOne({where: {email}})
-        const token = generateToken(
+        const token = resp && generateToken(
             {id: resp.id, email: resp.email, role_code: resp.role_code}, '5m'
         )
-        const passwordTemp = generateTemporaryPassword(8)
-        if (resp) {
+        const passwordTemp = resp && await generateTemporaryPassword(8)
+        if (resp && token) {
             await db.User.update({
-                password: passwordTemp,
+                passwordReset: passwordTemp,
                 tokenResetPassword: token,
                 isForgotPassword: true
             }, {
@@ -272,8 +284,8 @@ export const resetPassword = (token, password) => new Promise(async (resolve, re
             jwt.verify(token, process.env.JWT_SECRET, (err) => { // verify token is expired or not ?
                 if (err) {
                     resolve({
-                        err: 1,
-                        mes: 'Token expired. Require reset password again'
+                        code: 1,
+                        message: 'Token expired. Require reset password again'
                     })
                 } else {
                     checkToken = true; // if token is not expired, set checkToken = true
@@ -281,21 +293,22 @@ export const resetPassword = (token, password) => new Promise(async (resolve, re
             })
         }else{
             resolve({
-                err: 1,
-                mes: 'Token not found'
+                code: 1,
+                message: 'Token not found'
             })
         }
         if (checkToken) { // if token is not expired, reset password and set tokenResetPassword = null in db User
             await db.User.update({
                 password: hashPassword(password),
                 tokenResetPassword: null,
-                isForgotPassword: false
+                isForgotPassword: false,
+                passwordReset: null
             }, {
                 where: {tokenResetPassword: token}
             })
             resolve({
-                err: 0,
-                mes: 'Reset password success'
+                code: 0,
+                message: 'Reset password success'
             })
         }
     } catch (e) {

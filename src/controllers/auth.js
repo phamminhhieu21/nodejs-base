@@ -117,16 +117,16 @@ export const forgotPassword = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
     try {
-        const {token, password} = req.body
+        const {token, newPassword} = req.body
         const {error} = joi.object({
             token,
             password
         }).validate({
             token,
-            password
+            password: newPassword
         })
         if (error) return badRequest(error.details[0]?.message, res)
-        const response = await services.resetPassword(token, password)
+        const response = await services.resetPassword(token, newPassword)
         return res.status(200).json(response)
     } catch (err) {
         return internalServerError(res)
