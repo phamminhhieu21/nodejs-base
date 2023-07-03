@@ -44,6 +44,9 @@
     "sqlite3": "^5.1.6",
     "uuid": "^9.0.0"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "devDependencies": {
     "@babel/cli": "^7.21.5",
     "@babel/core": "^7.22.1",
