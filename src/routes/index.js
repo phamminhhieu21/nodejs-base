@@ -1,10 +1,10 @@
-import user from './user';
-import auth from './auth';
-import insert from './insert';
-import book from './book';
-import media from './media';
+import user from './userRoute';
+import auth from './authRoute';
+import insert from './insertRoute';
+import book from './bookRoute';
+import media from './mediaRoute';
 import * as controllers from '../controllers'
-import { notFound } from '../middlewares/handleErrors';
+import { notFound } from '../middlewares/handleErrorMiddleware';
 const initRoutes = (app) => {
   // auth
   app.use('/api/v1/auth',auth );

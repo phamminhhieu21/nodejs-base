@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import { badRequest, UnauthorizedError } from "./handleErrors";
+import { badRequest, UnauthorizedError } from "./handleErrorMiddleware";
 
-const verifyToken = (req, res, next) => {
+const verifyTokenMiddleware = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const access_token = authHeader?.split(" ")[1];
   if (!access_token) return badRequest("Require authorization", res);
@@ -14,4 +14,4 @@ const verifyToken = (req, res, next) => {
     next(); // call next middleware 
   });
 };
-export default verifyToken;
+export default verifyTokenMiddleware;

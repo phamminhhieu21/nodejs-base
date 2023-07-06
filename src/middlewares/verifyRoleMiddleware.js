@@ -1,4 +1,4 @@
-import { UnauthorizedError } from "./handleErrors";
+import { UnauthorizedError } from "./handleErrorMiddleware";
 
 export const isAdmin = (req, res, next) => {
   const { role_code } = req.user;

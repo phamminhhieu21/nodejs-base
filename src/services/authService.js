@@ -241,15 +241,15 @@ export const verifyLoginProfile = (idGoogle, tokenLogin) => new Promise(async (r
     }
 })
 
-export const changePassword = (email, newPassword, oldPassword) => new Promise(async (resolve, reject) => {
+export const changePassword = (id, newPassword, oldPassword) => new Promise(async (resolve, reject) => {
     try {
-        const resp = await db.User.findOne({where: {email}})
+        const resp = await db.User.findOne({where: {id}})
         const isMatchPassword = comparePassword(oldPassword, resp.password)
         if (isMatchPassword) {
             await db.User.update({
                 password: hashPassword(newPassword)
             }, {
-                where: {email}
+                where: {id}
             })
             resolve({
                 code: 0,

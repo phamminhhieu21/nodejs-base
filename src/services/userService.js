@@ -9,7 +9,7 @@ export const getOne = (idUser) => new Promise(async (resolve, reject) => {
                 exclude: ['password', 'role_code', 'refresh_token', 'createdAt', 'updatedAt']
             },
             include: [
-                { model: db.Role, as: 'roleData', attributes: ['id', 'code', 'value'] } // as : 'roleData' is the alias of the model Role in User model (src\models\user.js) 
+                { model: db.Role, as: 'roleData', attributes: ['id', 'code', 'value'] } // as : 'roleData' is the alias of the model Role in User model (src\models\userController.js)
             ]
         })
         resolve({

@@ -1,5 +1,5 @@
 import * as services from '../services'
-import {internalServerError, badRequest} from '../middlewares/handleErrors'
+import {internalServerError, badRequest} from '../middlewares/handleErrorMiddleware'
 import {
     email,
     password,
@@ -10,7 +10,8 @@ import {
     date_of_birth,
     token,
     oldPassword,
-    newPassword
+    newPassword,
+    id
 } from '../utils/helpers/joi_schema'
 import joi from 'joi'
 import {urlPaths} from "../constants/urlPaths";
@@ -103,14 +104,14 @@ export const verifyLoginProfile = async (req, res) => {
 
 export const changePassword = async (req, res) => {
     try {
-        const {email ,newPassword, oldPassword } = req.body
+        const {id ,newPassword, oldPassword } = req.body
         const {error} = joi.object({
-            email,
+            id,
             newPassword,
             oldPassword
         }).validate(req.body)
         if (error) return badRequest(error.details[0]?.message, res)
-        const response = await services.changePassword(email, newPassword, oldPassword)
+        const response = await services.changePassword(id, newPassword, oldPassword)
         return res.status(200).json(response)
     } catch (err) {
         return internalServerError(res)

@@ -1,15 +1,15 @@
 import * as controllers from '../controllers'
 import express from 'express'
-import verifyToken from '../middlewares/verifyToken'
-import { isAdmin, isCreatorOrAdmin } from '../middlewares/verifyRole'
-import uploadCloud from '../middlewares/uploadCloud'
+import verifyTokenMiddleware from '../middlewares/verifyTokenMiddleware'
+import { isAdmin, isCreatorOrAdmin } from '../middlewares/verifyRoleMiddleware'
+import uploadCloud from '../middlewares/uploadCloudMiddleware'
 const router = express.Router()
 
 //* PUBLIC ROUTES
 router.get('/', controllers.getBooks)
 
 //* PRIVATE ROUTES
-router.use(verifyToken)
+router.use(verifyTokenMiddleware)
 router.use(isCreatorOrAdmin)
 router.post('/',uploadCloud.single('image'), controllers.createBook)
 router.put('/',uploadCloud.single('image'), controllers.updateBook)

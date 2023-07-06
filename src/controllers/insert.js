@@ -1,5 +1,5 @@
 import * as services from '../services';
-import {badRequest, internalServerError} from '../middlewares/handleErrors'
+import {badRequest, internalServerError} from '../middlewares/handleErrorMiddleware'
 
 export const insertData = async (req, res) => {
   try {

@@ -1,5 +1,5 @@
 import * as services from "../services"
-import { badRequest, internalServerError} from '../middlewares/handleErrors'
+import { badRequest, internalServerError} from '../middlewares/handleErrorMiddleware'
 import Joi from 'joi';
 const cloudinary = require('cloudinary').v2
 
