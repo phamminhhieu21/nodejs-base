@@ -8,7 +8,7 @@ const router = express.Router()
 router.use(verifyTokenMiddleware) // add verifyTokenMiddleware middleware to all routes below
 // router.use(isAdmin) // add isAdmin middleware to all routes below
 // router.get('/:idUser', controllers.getCurrent)
-router.put('/update-profile',uploadCloud.single('avatar') ,controllers.updateProfileUser)
+router.post('/update-profile',uploadCloud.single('avatar') ,controllers.updateProfileUser)
 
 
 module.exports = router

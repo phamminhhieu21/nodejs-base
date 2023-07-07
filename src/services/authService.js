@@ -185,7 +185,7 @@ export const refreshToken = (refresh_token) => new Promise(async (resolve, rejec
                         err: accessToken ? 0 : 1,
                         mes: accessToken ? 'OK' : 'Fail to generate new access token. Let try more time',
                         'access_token': accessToken ? `${accessToken}` : accessToken,
-                        'refresh_token': refresh_token
+                        // 'refresh_token': refresh_token
                     })
                 }
             })
