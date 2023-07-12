@@ -22,7 +22,6 @@ export const forgotPasswordHtml = (temporaryPassword, token) => {
 }
 
 export const registerMailHtml = (token) => {
-    console.log(urlPaths.server.REGISTER_MAIL)
     return `
     <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 16px; color: #000000;">
         <div style="margin-bottom: 20px;">

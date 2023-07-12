@@ -1,7 +1,8 @@
 import * as controllers from '../controllers'
 import express from 'express'
 import verifyTokenMiddleware from '../middlewares/verifyTokenMiddleware'
-import { isAdmin } from '../middlewares/verifyRoleMiddleware'
+import {isAdmin} from '../middlewares/verifyRoleMiddleware'
+
 const router = express.Router()
 
 // PUBLIC ROUTES

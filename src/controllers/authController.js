@@ -78,14 +78,14 @@ export const login = async (req, res) => {
 
 export const refreshTokenController = async (req, res) => {
     try {
-        console.log('refresh token controller', req.body.refresh_token)
+        const {token : rushToken} = req.params
         const {error} = joi.object({
             refreshToken
         }).validate({
-            refreshToken: req.body.refresh_token
+            refreshToken: rushToken
         }) // validate email and password with joi schema from helpers folder (joi_schema.js)
         if (error) return badRequest(error.details[0]?.message, res)
-        const response = await services.refreshToken(req.body.refresh_token)
+        const response = await services.refreshToken(rushToken)
         return res.status(200).json(response)
     } catch (err) {
         return internalServerError(res)

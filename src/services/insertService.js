@@ -14,7 +14,6 @@ export const insertData = () =>
       let books =  Object.keys(data).reduce((acc, current) => {
         acc.push(...data[current].map(item => {
           return {
-            id : item.upc,
             title : item.bookTitle,
             price : item.bookPrice,
             available : +item.available,

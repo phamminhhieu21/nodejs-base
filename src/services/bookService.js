@@ -11,12 +11,12 @@ export const getBooks = ({page, limit, order, title, available, ...query}) => ne
         const fLimit = +limit || +process.env.LIMIT
         queries.offset = offset * fLimit // offset is used to skip rows in table
         queries.limit = fLimit // limit is used to limit number of rows in table
-        queries.order = order ? [order] : [['createdAt', 'DESC']] // order is used to sort data in ascending or descending order (default order = DESC)
+        queries.order = order ? [order] : [['id', 'DESC']] // order is used to sort data in ascending or descending order (default order = DESC)
         if (title) query.title = {[Op.substring]: title} // Op.substring is used to find substring in string
         if (available) query.available = {[Op.between]: available} // Op.between is used to find value between two values
-        const response = await db.Book.findAndCountAll({ // findAndCountAll is used to get total count of rows in table
+        const response = await db.Book.findAndCountAll({
             where: query,
-            ...queries,
+            ...queries, // spread queries object to findAndCountAll function arguments (offset, limit, order)
             attributes: {
                 exclude: ['category_code', 'description']
             },
@@ -26,7 +26,6 @@ export const getBooks = ({page, limit, order, title, available, ...query}) => ne
         })
         resolve({
             code: response ? 0 : 1,
-            // mes: response ? 'Got' : 'Cannot found books',
             data: {
                 total: response.count,
                 limit: fLimit,
