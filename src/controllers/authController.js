@@ -12,7 +12,7 @@ import {
     oldPassword,
     newPassword,
     id
-} from '../utils/helpers/joi_schema'
+} from '../helpers/joi_schema'
 import joi from 'joi'
 import {urlPaths} from "../constants/urlPaths";
 

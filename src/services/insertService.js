@@ -1,6 +1,6 @@
 import db from "../models";
 import data from '../../data/data.json'
-import { generateCode } from '../utils/helpers/db';
+import { generateCode } from '../helpers/db';
 export const insertData = () => 
   new Promise( async(resolve, reject) =>{
     try{

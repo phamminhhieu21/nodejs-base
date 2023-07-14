@@ -1,6 +1,6 @@
 import * as services from "../services"
 import { internalServerError} from "../middlewares/handleErrorMiddleware"
-import { id} from "../utils/helpers/joi_schema";
+import { id} from "../helpers/joi_schema";
 const cloudinary = require('cloudinary').v2
 import joi from 'joi';
 

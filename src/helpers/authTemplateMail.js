@@ -1,4 +1,4 @@
-import {urlPaths} from "../../constants/urlPaths";
+import {urlPaths} from "../constants/urlPaths";
 
 export const forgotPasswordHtml = (temporaryPassword, token) => {
     return `
