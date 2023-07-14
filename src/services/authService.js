@@ -1,12 +1,12 @@
 import db from '../models'
-import {comparePassword, hashPassword, generateTemporaryPassword} from '../helpers/password'
+import {comparePassword, hashPassword, generateTemporaryPassword} from '../Utils/password'
 import jwt from 'jsonwebtoken'
-import {forgotPasswordHtml, registerMailHtml} from "../helpers/authTemplateMail";
+import {forgotPasswordHtml, registerMailHtml} from "../Utils/authTemplateMail";
 import {urlPaths} from "../constants/urlPaths";
 
 const {v4: uuidv4} = require('uuid')
-import sendMail from '../helpers/sendMail'
-import {generateAccessToken, generateToken, verifyToken} from '../helpers/jwt'
+import sendMail from '../Utils/sendMail'
+import {generateAccessToken, generateToken, verifyToken} from '../Utils/jwt'
 
 export const register = ({
                              email,
