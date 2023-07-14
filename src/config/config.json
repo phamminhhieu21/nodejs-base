@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "316579_admin",
+    "username": "db1-test",
     "password": "@Hieupm2k03",
-    "database": "node-db-test_base",
-    "host": "mysql-node-db-test.alwaysdata.net",
+    "database": "db1-test_node",
+    "host": "mysql-db1-test.alwaysdata.net",
     "dialect": "mysql",
     "logging": false,
     "timezone": "+07:00"

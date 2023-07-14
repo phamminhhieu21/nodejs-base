@@ -1,12 +1,13 @@
 import db from '../models'
-import {comparePassword, hashPassword, generateTemporaryPassword} from '../helpers/password'
+import {comparePassword, hashPassword, generateTemporaryPassword} from '../Utils/password'
 import jwt from 'jsonwebtoken'
-import {forgotPasswordHtml, registerMailHtml} from "../helpers/authTemplateMail";
+import {forgotPasswordHtml, registerMailHtml} from "../helpers/mail";
 import {urlPaths} from "../constants/urlPaths";
 
 const {v4: uuidv4} = require('uuid')
-import sendMail from '../helpers/sendMail'
-import {generateAccessToken, generateToken, verifyToken} from '../helpers/jwt'
+import sendMail from '../Utils/sendMail'
+import {generateAccessToken, generateToken, verifyToken} from '../Utils/jwt'
+import {getInfoData} from "../Utils/object";
 
 export const register = ({
                              email,
@@ -127,9 +128,7 @@ export const login = (email, password) => new Promise(async (resolve, reject) =>
         resolve({
             code: accessToken ? 0 : 1,
             message: accessToken ? `Welcome ${resp?.name}` : resp ? 'Wrong password' : 'Email not registered or not activated',
-            data: {
-                id: resp?.id, email: resp?.email, name: resp?.name, role_code: resp?.role_code, avatar: resp?.avatar
-            },
+            data: getInfoData({fields: ['id', 'email', 'name', 'role_code', 'avatar'], objectData: resp}),
             typeLogin: resp?.email ? 'normal' : null,
             access_token: accessToken ? `${accessToken}` : null, // add Bearer to token for authorization header in request
             refresh_token: refreshToken ? `${refreshToken}` : null // refresh token is used to get new access token
@@ -165,7 +164,7 @@ export const refreshToken = (refresh_token) => new Promise(async (resolve, rejec
                     resolve({
                         code: accessToken ? 0 : 1,
                         message: accessToken ? 'OK' : 'Fail to generate new access token. Let try more time',
-                        access_token : accessToken ? `${accessToken}` : null, // 'refresh_token': refresh_token
+                        access_token: accessToken ? `${accessToken}` : null, // 'refresh_token': refresh_token
                     })
                 }
             })
@@ -194,13 +193,7 @@ export const verifyLoginProfile = (idGoogle, tokenLogin) => new Promise(async (r
             resolve({
                 code: token ? 0 : 1,
                 message: token ? `Welcome ${response.name}` : 'User not found or fail to login !',
-                data: {
-                    id: response.id,
-                    email: response.email,
-                    name: response.name,
-                    role_code: response.role_code,
-                    avatar: response.avatar
-                },
+                data: getInfoData({fields: ['id', 'email', 'name', 'role_code', 'avatar'], objectData: response}),
                 access_token: token ? `${token}` : null,
                 typeLogin: response.typeLogin
             })

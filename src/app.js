@@ -5,7 +5,7 @@ const compression = require('compression');
 const {default: helmet} = require('helmet');
 import cors from 'cors';
 import initRoutes from './routes'
-
+import {checkOverLoad} from './helpers/checkConnect'
 require('dotenv').config();
 require('../passport'); // passport.js is a file that contains the configuration for passport (passport is a middleware for authentication)
 
@@ -27,7 +27,11 @@ app.use(helmet()); // secure apps by setting various HTTP headers
 app.use(compression()); // compress all responses (gzip compression)
 
 //* init database
+// connect to sql
 require('../connection');
+// connect to mongodb
+// require('./dbs/init.mongodb')
+// checkOverLoad();
 
 //* init routes
 initRoutes(app)
